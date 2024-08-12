@@ -6,6 +6,8 @@ using HomeApi.Contracts.Models.Rooms;
 using HomeApi.Data.Models;
 using HomeApi.Data.Repos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace HomeApi.Controllers
 {
@@ -70,6 +72,23 @@ namespace HomeApi.Controllers
             }
             await _repository.DeleteRoom(room);
             return StatusCode(200, $"Комната {room.Name} удалена");
+        }
+        [HttpPut]
+        [Route("{id}")]
+        public async Task <IActionResult> Update([FromRoute] Guid id, [FromBody] Room updRoom)
+        {
+            var room = await _repository.GetRoomById(id);
+            if (room == null)
+                return StatusCode(400, $"Ошибка: Комната с идентификатором {id} не существует.");
+            room.Name = updRoom.Name;
+            room.Name = updRoom.Name;
+            room.Area = updRoom.Area;
+            room.GasConnected = updRoom.GasConnected;
+            room.Voltage = updRoom.Voltage;
+            
+            await _repository.UpdateRoom(room);
+            return StatusCode(200, $"Данные комнаты {room.Name} обновлены");
+
         }
     }
 }

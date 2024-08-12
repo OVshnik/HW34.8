@@ -14,5 +14,7 @@ namespace HomeApi.Data.Repos
 
         Task AddRoom(Room room);
         Task DeleteRoom(Room room);
+
+        Task UpdateRoom(Room room);
     }
 }

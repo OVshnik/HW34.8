@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using HomeApi.Data.Models;
+using HomeApi.Data.Queries;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace HomeApi.Data.Repos
 {
@@ -52,5 +54,18 @@ namespace HomeApi.Data.Repos
                 _context.Rooms.Remove(room);
             await _context.SaveChangesAsync();
         }
+        /// <summary>
+        ///  Обновить данные комнаты
+        /// </summary>
+        public async Task UpdateRoom(Room room)
+        {
+            var entry = _context.Entry(room);
+            if (entry.State == EntityState.Detached)
+                _context.Rooms.Update(room);
+
+            // Сохраняем изменения в базе 
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
